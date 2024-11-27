@@ -6,3 +6,32 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  idx       Int       @id @default(autoincrement()) @map("idx")
+  userId    String    @unique @map("userId")
+  password  String    @map("password")
+  name      String    @map("name")
+  createdAt DateTime  @default(now()) @map("createdAt")
+
+  characters Character[] // User와 연결된 Character 리스트
+
+  @@map("User")
+}
+
+model Character {
+  idx       Int       @id @default(autoincrement()) @map("idx") // Primary Key
+  nickname  String    @unique @map("nickname") // 캐릭터 이름
+
+  health    Int       @default(500) @map("health") // 캐릭터 체력 (기본값: 500)
+  power     Int       @default(100) @map("power") // 캐릭터 공격력 (기본값: 100)
+  money     Int       @default(10000) @map("money") // 캐릭터 소지금 (기본값: 10000)
+
+  userIdx   Int       @map("userIdx") // User와의 관계를 위한 외래 키
+  user      User      @relation(fields: [userIdx], references: [idx]) // User와 관계 설정
+
+  // inventory Character_Inventory[] // 캐릭터와 연결된 Inventory
+  // items     Character_Item[] // 캐릭터와 연결된 장착된 Item 리스트
+
+  @@map("Character") // 데이터베이스 테이블 이름을 "Character"로 설정
+}
