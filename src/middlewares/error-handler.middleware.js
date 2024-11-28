@@ -1,9 +1,8 @@
 const errorHandlerMiddleware = (err, req, res, next) => {
-  console.error(2222);
   console.error(err);
 
   // Joi ValidationError 처리
-  if (err.isJoi) {
+  if (err.name === 'ValidationError') {
     return res.status(400).json({ errorMessage: err.details[0].message });
   }
 
