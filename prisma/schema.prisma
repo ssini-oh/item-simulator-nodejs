@@ -30,8 +30,43 @@ model Character {
   userIdx   Int       @map("userIdx") // User와의 관계를 위한 외래 키
   user      User      @relation(fields: [userIdx], references: [idx]) // User와 관계 설정
 
-  // inventory Character_Inventory[] // 캐릭터와 연결된 Inventory
-  // items     Character_Item[] // 캐릭터와 연결된 장착된 Item 리스트
+  inventory Character_Inventory[] // 캐릭터와 연결된 Inventory
+  items     Character_Item[] // 캐릭터와 연결된 장착된 Item 리스트
 
   @@map("Character") // 데이터베이스 테이블 이름을 "Character"로 설정
+}
+
+model Item {
+  idx       Int       @id @default(autoincrement()) @map("idx") // Primary Key
+  name      String    @unique @map("name") // 아이템 이름 (UNIQUE)
+  type      String    @map("type") // 아이템 타입 (무기, 방어구 등)
+  price     Int       @map("price") // 아이템 가격
+  stats     Json      @map("stats") // 아이템 스탯 (JSON 형식)
+
+  inventory Character_Inventory[] // 인벤토리에 있는 아이템
+  equipped  Character_Item[]      // 장착된 아이템
+
+  @@map("Item") // 데이터베이스 테이블 이름 설정
+}
+
+model Character_Inventory {
+  idx          Int       @id @default(autoincrement()) @map("idx") // Primary Key
+  characterIdx Int       @map("character_idx") // Character와의 관계를 위한 외래 키
+  itemIdx      Int       @map("item_idx") // Item과의 관계를 위한 외래 키
+
+  character   Character @relation(fields: [characterIdx], references: [idx]) // Character 관계
+  item        Item      @relation(fields: [itemIdx], references: [idx])      // Item 관계
+
+  @@map("Character_Inventory") // 데이터베이스 테이블 이름 설정
+}
+
+model Character_Item {
+  idx          Int       @id @default(autoincrement()) @map("idx") // Primary Key
+  characterIdx Int       @map("character_idx") // Character와의 관계를 위한 외래 키
+  itemIdx      Int       @map("item_idx") // Item과의 관계를 위한 외래 키
+
+  character   Character @relation(fields: [characterIdx], references: [idx]) // Character 관계
+  item        Item      @relation(fields: [itemIdx], references: [idx])      // Item 관계
+
+  @@map("Character_Item") // 데이터베이스 테이블 이름 설정
 }
