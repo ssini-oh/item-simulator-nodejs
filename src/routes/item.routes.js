@@ -78,9 +78,49 @@ router.patch('/items/:idx', async (req, res, next) => {
 });
 
 //---- 아이템 전체 조회 API
-router.get('/items', async (req, res, next) => {});
+router.get('/items', async (req, res, next) => {
+  try {
+    // 아이템 전체 조회
+    const items = await prisma.item.findMany({
+      select: {
+        idx: true,
+        price: true,
+        name: true,
+      },
+      orderBy: {
+        idx: 'asc',
+      },
+    });
+
+    // 응답 반환
+    return res.status(200).json(items);
+  } catch (error) {
+    next(error);
+  }
+});
 
 //---- 아이템 상세 조회 API
-router.get('/items/:idx', async (req, res, next) => {});
+router.get('/items/:idx', async (req, res, next) => {
+  const { idx } = req.params;
+
+  try {
+    // 아이템 상세 조회
+    const item = await prisma.item.findUnique({
+      where: { idx: Number(idx) },
+    });
+
+    // 아이템 존재 여부 확인
+    if (!item) {
+      return res
+        .status(404)
+        .json({ errorMessage: '존재하지 않는 아이템입니다.' });
+    }
+
+    // 응답 반환
+    return res.status(200).json(item);
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default router;
