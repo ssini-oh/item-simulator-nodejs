@@ -1,10 +1,13 @@
 import express from 'express';
+import dotenv from 'dotenv';
 
 import errorHandlerMiddleware from './middlewares/error-handler.middleware.js';
 
 import authRoutes from './routes/auth.routes.js';
 import characterRoutes from './routes/character.routes.js';
 import itemRoutes from './routes/item.routes.js';
+
+dotenv.config();
 
 const app = express();
 const PORT = 3000;
