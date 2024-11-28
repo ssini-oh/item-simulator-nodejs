@@ -15,6 +15,11 @@ router.post('/signup', async (req, res, next) => {
 
     // userId 중복 확인
     const existingUser = await prisma.user.findUnique({ where: { userId } });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ errorMessage: '이미 존재하는 아이디입니다.' });
+    }
 
     // 비밀번호 해싱
     const hashedPassword = await bcrypt.hash(password, 10);
