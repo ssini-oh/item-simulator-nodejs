@@ -39,7 +39,43 @@ router.post('/items', async (req, res, next) => {
 });
 
 //---- 아이템 수정 API
-router.put('/items/:idx', async (req, res, next) => {});
+router.patch('/items/:idx', async (req, res, next) => {
+  const { idx } = req.params;
+
+  try {
+    // 데이터 유효성 검사
+    const validation = await itemUpdateSchema.validateAsync(req.body);
+    const { name, stats } = validation;
+
+    // 아이템 존재 여부 확인
+    const existingItem = await prisma.item.findUnique({
+      where: { idx: Number(idx) },
+    });
+    if (!existingItem) {
+      return res
+        .status(404)
+        .json({ errorMessage: '존재하지 않는 아이템입니다.' });
+    }
+
+    // 수정 불가능한 필드 확인
+    if (req.body.type || req.body.price) {
+      return res
+        .status(400)
+        .json({ errorMessage: '가격 및 타입은 수정할 수 없습니다.' });
+    }
+
+    // 아이템 업데이트
+    const updatedItem = await prisma.item.update({
+      where: { idx: Number(idx) },
+      data: validation,
+    });
+
+    // 응답 반환
+    return res.status(200).json({ message: '아이템 수정이 완료되었습니다.' });
+  } catch (error) {
+    next(error);
+  }
+});
 
 //---- 아이템 전체 조회 API
 router.get('/items', async (req, res, next) => {});
