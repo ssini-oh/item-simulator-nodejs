@@ -119,9 +119,9 @@ src/
 
 ## 기술 스택
 
-- **언어 및 런타임**: Node.js (16.x)
-- **웹 프레임워크**: Express (4.x)
-- **ORM**: Prisma (5.x)
+- **언어 및 런타임**: Node.js
+- **웹 프레임워크**: Express
+- **ORM**: Prisma
 - **인증**: JSON Web Token (JWT)
 - **데이터베이스**: MySQL (AWS RDS)
 - **유효성 검사**: Joi
