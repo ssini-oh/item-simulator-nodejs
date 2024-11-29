@@ -114,6 +114,7 @@ src/
 │   ├── character.routes.js # 캐릭터 관련 API
 │   └── item.routes.js      # 아이템 관련 API
 ├── utils/                  # 유틸리티 함수 및 Prisma 설정
+├── validations/            # 유효성 검사 관련 파일
 └── app.js                  # Express 서버 설정
 ```
 
